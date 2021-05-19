@@ -1,9 +1,10 @@
-<div class="headNav">
-    <h1><a href="{{ path('main_home') }}"><img src="{{ asset('img/logo.svg') }}" alt="Series"></a></h1>
-
-    <ul class="navbar">
-        <li><a href="{{ path('main_home') }}">Home</a></li>
-        <li><a href="{{ path('serie_list') }}">List of series</a></li>
-
-    </ul>
+<div class="flex_between flex_div">
+    <h1><a href="{{ path('main_home') }}"> <img src="{{ asset('img/logo.svg') }}" alt="Series !"></a></h1>
+    <nav>
+        <ul>
+            <li><a href="{{ path('main_home') }}" title="Home">Home</a></li>
+            <li><a href="{{ path('serie_list', {'page' : 1}) }}" title="All series">All series</a></li>
+            <li><a href="{{ path('serie_create') }}" title="Add a new serie">Create</a></li>
+        </ul>
+    </nav>
 </div>
