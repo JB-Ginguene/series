@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+body {
+    background: #5eb5e0;
+    font-family: "Roboto";
+    padding: 0px 100px 0px 100px;
+}
+
+.headNav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.headNav img {
+    max-height: 1000px;
+}
+
+.navbar {
+    list-style-type: none;
+    display: flex;
+    margin: 0px;
+    padding: 0px 0px 0px 50px;
+    font-family: "Anton";
+    font-size: 1.5em;
+    letter-spacing: 0.1em;
+}
+
+.navbar > li {
+    padding-right: 30px;
+}
+
+.navbar > li > a {
+    padding: 10px;
+    background: #B0413E;
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar > li > a:hover {
+    padding: 10px;
+    background: #DDDDDD;
+    color: #B0413E;
+}
+
+.footer {
+    background: #dfdfdf;
+    position: absolute;
+    bottom: 0px;
+}
