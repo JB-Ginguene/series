@@ -3,16 +3,17 @@
 {% block title %} {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h2>List of series</h2>
-    {% for serie in series %}
-        <p>{{ serie.name }}</p>
-    {% endfor %}
-{% endblock %}
 
-{% block extrastyles %}<style>
-    body {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
-        url("{{ asset('img/backdrops/' ~ serie.backdrop) }}");
-    }
-    </style>
+    <h2>List of series</h2>
+    <section class="series-list">
+        {% for serie in series %}
+            <article>
+            <a href="{{ path('serie_detail', {'id' : serie.id}) }}" title="View Serie's detail">
+                <img src="{{ asset('img/posters/series/' ~ serie.poster) }}" alt="{{ serie.name }}">
+            </a>
+            </article>
+        {% else %}
+            <div>No Series sorry !</div>
+        {% endfor %}</section>
+
 {% endblock %}

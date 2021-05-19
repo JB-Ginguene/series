@@ -5,4 +5,18 @@
 {% block body %}
 
     <h2>Detail of serie</h2>
+    <p>{{ serie.name }}</p>
+    <p>Genre {{ serie.genres }}</p>
+    <p>Year : {{ serie.dateCreated|date('Y-m-d') }}</p>
+    <p>Overview : {{ serie.overview }}</p>
+
+
+{% endblock %}
+
+{% block extrastyles %}<style>
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
+        url("{{ asset('img/backdrops/' ~ serie.backdrop) }}");
+    }
+    </style>
 {% endblock %}
