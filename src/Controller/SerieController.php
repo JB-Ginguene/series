@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SerieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,36 +12,32 @@ class SerieController extends AbstractController
     /**
      * @Route("/series", name="serie_list")
      */
-    public function list(): Response
+    public function list(SerieRepository $serieRepository): Response
     {
-
-        $serie = "Sliders";
-        $test = "Test";
-
-        dump($serie);
-        dump($test);
-
         //TODO récupérer la liste de mes séries
+        // $series = $serieRepository->findAll();
 
-        return $this->render('serie/list.html.twig', [
-
-        ]);
+        $series = $serieRepository->findBy([], ["vote" => "DESC"], 50);
+        return $this->render('serie/list.html.twig', ["series" => $series]);
     }
 
 
     /**
      * @Route("/series/detail/{id}", name="serie_detail")
      */
-    public function detail($id): Response
+    public function detail($id, SerieRepository $serieRepository): Response
     {
-
         //TODO récupérer la série en fonction de son id
+        $serie = $serieRepository->find($id);
+
+        if (!$serie) {
+            throw $this->createNotFoundException('Oops, this series seems to not exist in our database!');
+        }
 
         return $this->render('serie/detail.html.twig', [
-
+            "serie" => $serie
         ]);
     }
-
 
 
     /**
@@ -48,7 +45,6 @@ class SerieController extends AbstractController
      */
     public function create(): Response
     {
-
         //TODO générer un formulaire pour ajouter ma nouvelle série
 
         return $this->render('serie/create.html.twig', [

@@ -1,8 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }}{% endblock %}
+{% block title %} {{ parent() }}{% endblock %}
 
 {% block body %}
     <h2>List of series</h2>
+    {% for serie in series %}
+        <p>{{ serie.name }}</p>
+    {% endfor %}
+{% endblock %}
 
+{% block extrastyles %}<style>
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
+        url("{{ asset('img/backdrops/' ~ serie.backdrop) }}");
+    }
+    </style>
 {% endblock %}
