@@ -26,7 +26,7 @@ class SerieRepository extends ServiceEntityRepository
         /*
         $entityManager = $this->getEntityManager();
         $dql = "SELECT s
-                FROM App\Entity\Serie as s
+                FROM App\Entity\Serie as s //on requete l'Entity
                 WHERE s.vote > 8
                 AND s.popularity > 100
                 ORDER BY s.popularity DESC";

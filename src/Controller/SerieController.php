@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Serie;
+use App\Form\SerieType;
 use App\Repository\SerieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,36 +37,39 @@ class SerieController extends AbstractController
     }
 
 
+    /**
+     * @Route("/series/detail/{id}", name="serie_detail")
+     */
+    public
+    function detail($id, SerieRepository $serieRepository): Response
+    {
+        //TODO récupérer la série en fonction de son id
+        $serie = $serieRepository->find($id);
 
-/**
- * @Route("/series/detail/{id}", name="serie_detail")
- */
-public
-function detail($id, SerieRepository $serieRepository): Response
-{
-    //TODO récupérer la série en fonction de son id
-    $serie = $serieRepository->find($id);
+        if (!$serie) {
+            throw $this->createNotFoundException('Oops, this series seems to not exist in our database!');
+        }
 
-    if (!$serie) {
-        throw $this->createNotFoundException('Oops, this series seems to not exist in our database!');
+        return $this->render('serie/detail.html.twig', [
+            "serie" => $serie
+        ]);
     }
 
-    return $this->render('serie/detail.html.twig', [
-        "serie" => $serie
-    ]);
-}
 
+    /**
+     * @Route("/series/create", name="serie_create")
+     */
+    public
+    function create(): Response
+    {
+        //TODO générer un formulaire pour ajouter ma nouvelle série
 
-/**
- * @Route("/series/create", name="serie_create")
- */
-public
-function create(): Response
-{
-    //TODO générer un formulaire pour ajouter ma nouvelle série
+        $serie = new Serie();
+        $serieForm = $this->createForm(SerieType::class, $serie);
+        $serie->setDateCreated(new \DateTime());
 
-    return $this->render('serie/create.html.twig', [
-
-    ]);
-}
+        return $this->render('serie/create.html.twig', [
+            "createSerieForm"=>$serieForm->createView()
+        ]);
+    }
 }
