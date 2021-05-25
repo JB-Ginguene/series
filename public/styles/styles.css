@@ -70,7 +70,7 @@ nav li {
 }
 
 
-/********************** Module  5  Doctrine   **************************/
+/********************** Doctrine   **************************/
 
 .series-list {
     display: grid;
@@ -94,8 +94,8 @@ nav li {
     }
 }
 
-/*********************** Module 6 Form ******************************/
-/*
+/*********************** Form ******************************/
+
 label {
     display: block;
 }
@@ -108,9 +108,9 @@ select {
     width: 150px;
     max-width: 50%;
 }
-*/
-/*************************** Module 6 Flash *******************************/
-/*
+
+/*************************** Flash *******************************/
+
 .flash {
     padding: 20px;
     font-weight: bold;
@@ -121,15 +121,14 @@ select {
 }
 
 .flash-success {
-    background-color: lawngreen
+    background-color: mediumseagreen;
 }
 
 .flash-error {
-    background-color: red
+    background-color: #B0413E;
 }
-*/
-/************************** Module 7 Relations *****************************************/
-/*
+
+/************************** Relations *****************************************/
 
 .seasons article {
     display: flex;
@@ -140,4 +139,3 @@ select {
     max-height: 200px;
     margin-right: 0.6rem;
 }
-*/

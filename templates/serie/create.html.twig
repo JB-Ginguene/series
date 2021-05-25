@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Create{% endblock %}
+{% block title %} {{ parent() }} | Create{% endblock %}
 
 {% block body %}
 
     <h2>Create a serie</h2>
-
-    {{ form(createSerieForm) }}
+    {{ form_start(createSerieForm) }}
+        {{ form_widget(createSerieForm) }}
+        <button>Create a new serie</button>
+    {{ form_end(createSerieForm) }}
 
 {% endblock %}

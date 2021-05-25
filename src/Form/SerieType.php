@@ -41,8 +41,8 @@ class SerieType extends AbstractType
                     'Horror' => 'horror',
                     'Musical' => 'musical'
                 ],
-                'expanded' => true,
-                'multiple' => true
+                'multiple' => false,
+                'attr' => ['class' => 'formGenre']
             ])
             ->add('firstAirDate', DateType::class)
             ->add('lastAirDate', DateType::class, [

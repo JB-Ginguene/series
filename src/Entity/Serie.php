@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\SerieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SerieRepository::class)
@@ -26,21 +29,43 @@ class Serie
     }
 
     /**
+     * @Assert\NotBlank(message="Please provide a name for the series")
+     * @Assert\Length(
+     *     min=2,
+     *     max=255,
+     *     minMessage="Minimum 2 charaters please !",
+     *     minMessage="Maximum 255 charaters please !"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\Length(
+     *     min=2,
+     *     max=3000,
+     *     minMessage="Minimum 2 charaters please !",
+     *     minMessage="Maximum 3000 charaters please !"
+     * )
+     *
      * @ORM\Column(type="text", nullable=true)
      */
     private $overview;
 
     /**
+     * @Assert\Choice(choices={"canceled", "returning", "ended"})
+     *
      * @ORM\Column(type="string", length=50)
      */
     private $status;
 
     /**
+     * @Assert\Range(
+     *     min="0",
+     *     max="10",
+     *     notInRangeMessage="Vote must be between 0 and 10")
+     *
      * @ORM\Column(type="decimal", precision=3, scale=1)
      */
     private $vote;
@@ -61,6 +86,9 @@ class Serie
     private $firstAirDate;
 
     /**
+     * @Assert\GreaterThan(propertyPath="firstAirDate",
+     *     message="Last Air Date must be greather than First Air Date !")
+     *
      * @ORM\Column(type="date")
      */
     private $lastAirDate;
@@ -89,6 +117,16 @@ class Serie
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateModified;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Season::class, mappedBy="serie")
+     */
+    private $seasons;
+
+    public function __construct()
+    {
+        $this->seasons = new ArrayCollection();
+    }
 
     public function getName(): ?string
     {
@@ -242,6 +280,36 @@ class Serie
     public function setDateModified(?\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Season[]
+     */
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+    public function addSeason(Season $season): self
+    {
+        if (!$this->seasons->contains($season)) {
+            $this->seasons[] = $season;
+            $season->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeason(Season $season): self
+    {
+        if ($this->seasons->removeElement($season)) {
+            // set the owning side to null (unless already changed)
+            if ($season->getSerie() === $this) {
+                $season->setSerie(null);
+            }
+        }
 
         return $this;
     }
