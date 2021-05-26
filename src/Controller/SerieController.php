@@ -72,17 +72,63 @@ class SerieController extends AbstractController
 
         $serieForm->handleRequest($request);
 
-        if($serieForm->isSubmitted() && $serieForm->isValid()){
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
             $entityManager->persist($serie);
             $entityManager->flush();
 
             //message flash :
             $this->addFlash('success', 'The serie has been added');
-            return $this->redirectToRoute('serie_detail', ['id'=> $serie->getId()]);
+            return $this->redirectToRoute('serie_detail', ['id' => $serie->getId()]);
         }
 
         return $this->render('serie/create.html.twig', [
-            "createSerieForm"=>$serieForm->createView()
+            "createSerieForm" => $serieForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/series/edit/{id}", name="serie_edit")
+     */
+    public
+    function edit($id, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        //TODO générer un formulaire pour ajouter ma nouvelle série
+
+        $serie = $entityManager->find(Serie::class, $id);
+        if (!$serie) {
+            throw $this->createNotFoundException("Oops, this series doesn't exist in our DB");
+        }
+
+        $serieForm = $this->createForm(SerieType::class, $serie);
+        $serieForm->handleRequest($request);
+
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+            $serie->setDateModified(new \DateTime());
+            $entityManager->persist($serie);
+            $entityManager->flush();
+
+            //message flash :
+            $this->addFlash('success', 'The serie has been edited');
+            return $this->redirectToRoute('serie_detail', ['id' => $serie->getId()]);
+        }
+
+        return $this->render('serie/edit.html.twig', [
+            "serie"=>$serie,
+            "serieForm" => $serieForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/series/delete/{id}", name="serie_delete")
+     */
+    public
+    function delete($id, EntityManagerInterface $entityManager): Response
+    {
+        $serie = $entityManager->find(Serie::class, $id);
+        $entityManager->remove($serie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('main_home');
+    }
+
 }

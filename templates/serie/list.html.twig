@@ -16,7 +16,7 @@
     <section class="series-list">
         {% for serie in series %}
             <article>
-                <a href="{{ path('serie_detail', {'id' : serie.id}) }}" title="View Serie's detail">
+                <a href="{{ path('serie_detail', {'id' : serie.id}) }}" title="View Serie's detail | {{ serie.seasons|length }} season">
                     <img src="{{ asset('img/posters/series/' ~ serie.poster) }}" alt="{{ serie.name }}">
                 </a>
             </article>
