@@ -61,6 +61,7 @@ class ResetPasswordController extends AbstractController
      */
     public function checkEmail(): Response
     {
+        $token = $this->getTokenFromSession();
         // Generate a fake token if the user does not exist or someone hit this page directly.
         // This prevents exposing whether or not a user was found with the given email address or not
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
@@ -69,6 +70,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
+            'token' => $token
         ]);
     }
 
@@ -127,7 +129,7 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->render('reset_password/reset.html.twig', [
-            'resetForm' => $form->createView(),
+            'resetForm' => $form->createView()
         ]);
     }
 
@@ -156,20 +158,21 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_check_email');
         }
+        /*
+                $email = (new TemplatedEmail())
+                    ->from(new Address('jb@mail.com', 'Series Corp'))
+                    ->to($user->getEmail())
+                    ->subject('Your password reset request')
+                    ->htmlTemplate('reset_password/email.html.twig')
+                    ->context([
+                        'resetToken' => $resetToken,
+                    ])
+                ;
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('jb@mail.com', 'Series Corp'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-            ])
-        ;
-
-        $mailer->send($email);
-
+                $mailer->send($email);
+        */
         // Store the token object in session for retrieval in check-email route.
+        $this->storeTokenInSession($resetToken->getToken());
         $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('app_check_email');
