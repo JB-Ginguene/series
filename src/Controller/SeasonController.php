@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Season;
 use App\Form\SeasonType;
+use App\ManageEntity\UpdateEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ class SeasonController extends AbstractController
     /**
      * @Route("/season/create", name="season_create")
      */
-    public function create(Request $request): Response
+    public function create(Request $request, UpdateEntity $updateEntity): Response
     {
         $season = new Season();
         $seasonForm = $this->createForm(SeasonType::class, $season);
@@ -23,9 +24,10 @@ class SeasonController extends AbstractController
         if ($seasonForm->isSubmitted() && $seasonForm->isValid()) {
             $season->setDateCreated(new \DateTime());
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($season);
-            $entityManager->flush();
+            $updateEntity->save($season);
+
+            $this->addFlash('success','Congrats, season added!');
+            return $this->redirectToRoute('serie_detail',['id'=>$season->getSerie()->getId()]);
         }
 
         return $this->render('season/create.html.twig', [

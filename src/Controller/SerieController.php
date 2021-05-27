@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Serie;
 use App\Form\SerieType;
+use App\ManageEntity\UpdateEntity;
 use App\Repository\SerieRepository;
+use App\Upload\SerieImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,7 +65,10 @@ class SerieController extends AbstractController
      * @Route("/series/create", name="serie_create")
      */
     public
-    function create(Request $request, EntityManagerInterface $entityManager): Response
+    function create(Request $request,
+                    EntityManagerInterface $entityManager,
+                    UpdateEntity $updateEntity,
+                    SerieImage $serieImage): Response
     {
         //TODO générer un formulaire pour ajouter ma nouvelle série
 
@@ -73,12 +79,21 @@ class SerieController extends AbstractController
         $serieForm->handleRequest($request);
 
         if ($serieForm->isSubmitted() && $serieForm->isValid()) {
-            $entityManager->persist($serie);
-            $entityManager->flush();
+            $file = $serieForm->get('poster')->getData();
+            /**
+             * @var UploadedFile $file
+             */
+            if ($file) {
+                $directory = $this->getParameter('upload_poster_series_dir');
+                $serieImage->save($file, $serie, $directory);
+            }
+
+            $updateEntity->save($serie);
 
             //message flash :
             $this->addFlash('success', 'The serie has been added');
             return $this->redirectToRoute('serie_detail', ['id' => $serie->getId()]);
+
         }
 
         return $this->render('serie/create.html.twig', [
@@ -113,7 +128,7 @@ class SerieController extends AbstractController
         }
 
         return $this->render('serie/edit.html.twig', [
-            "serie"=>$serie,
+            "serie" => $serie,
             "serieForm" => $serieForm->createView()
         ]);
     }
